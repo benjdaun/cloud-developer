@@ -97,7 +97,7 @@ app.get("/cars/:id", (req: Request, res: Response) => {
     return res.status(400).send('id is required');
   }
 
-  // try to find the car by id randome change
+  // try to find the car by id randome change 
   const car = cars.filter((car) => car.id == id);
 
   if(car && car.length === 0) {
