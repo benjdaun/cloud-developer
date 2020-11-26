@@ -18,13 +18,77 @@ router.get('/', async (req: Request, res: Response) => {
 
 //@TODO
 //Add an endpoint to GET a specific resource by Primary Key
+router.get('/:id', async (req: Request, res: Response) => {
+
+    //"unpack" the parameters that were in the request into an object called id
+    let { id } = req.params;
+
+    /*
+    here for debugging
+    console.log('Does this do what I think?');
+    console.log(req.params.id);
+    console.log(id);
+    console.log(typeof id);
+    */
+
+    //response if no id is sent
+    if ( !req.params.id ) {
+        return res.status(400).send(`Please provide an id`);
+    }
+
+    //used the findByPk method from sequelize to find the specific feed item
+    //referenced by the id
+    const item: FeedItem = await FeedItem.findByPk(id);
+    
+    //response if item is not found
+    if( !item ) {
+        return res.status(404).send('There is no feed item with that id.')
+    }
+
+    //send that feed item back normally
+    res.status(200).send(item);
+
+      
+
+
+
+})
 
 // update a specific resource
 router.patch('/:id', 
     requireAuth, 
     async (req: Request, res: Response) => {
         //@TODO try it yourself
-        res.send(500).send("not implemented")
+
+        //skipping the case of not having an id at all
+
+
+        //unpack the request into the id object
+        let { id } = req.params;
+
+        //use findByPk from sequelize to get the FeedItem referenced by that id
+        //and put it in item
+        const item: FeedItem = await FeedItem.findByPk(id);
+
+        if( !item ) {
+            return res.status(404).send('That item wasn\'t found!');
+        }
+
+        //Check what's included with the patch body
+        //Replace url/caption
+        if(req.body.caption) {
+            item.caption = req.body.caption;
+        }
+        
+        if(req.body.url) {
+            item.url = req.body.url;
+        }
+        
+        //Save the item permanently to the database using the sequelize save method
+        const saved_item = item.save();
+
+        //send item back. for some reason, it didn't like saved item.
+        res.status(200).json(item);
 });
 
 
