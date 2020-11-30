@@ -3,8 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  appName: 'Udagram',
+  production: true,
+  appName: 'udacity-c2-restapi',
   apiHost: 'http://udacity-c2-restapi-dev.ca-central-1.elasticbeanstalk.com'
 };
 
