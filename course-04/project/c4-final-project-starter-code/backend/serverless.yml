@@ -7,10 +7,10 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
 
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'us-east-1'}
+  region: ${opt:region, 'ca-central-1'}
 
 functions:
 
@@ -24,15 +24,16 @@ functions:
       - http:
           method: get
           path: todos
+          authorizer: Auth
 
   # TODO: Configure this function
-  GetTodos:
   CreateTodo:
     handler: src/lambda/http/createTodo.handler
     events:
       - http:
           method: post
           path: todos
+          authorizer: Auth
 
   # TODO: Configure this function
   UpdateTodo:
@@ -41,6 +42,7 @@ functions:
       - http:
           method: patch
           path: todos/{todoId}
+          authorizer: Auth
 
   # TODO: Configure this function
   DeleteTodo:
@@ -49,6 +51,7 @@ functions:
       - http:
           method: delete
           path: todos/{todoId}
+          authorizer: Auth
 
   # TODO: Configure this function
   GenerateUploadUrl:
